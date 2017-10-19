@@ -1,0 +1,129 @@
+
+<head>
+<meta charset="UTF-8">
+<title>测试报告</title>
+</head>
+<a href="/testlink/">回首页</a><br>
+{% autoescape off %}
+<font style="font-weight:bold;" color="blue">
+<a>Test Case:</a>
+</font>
+<br>
+{% for i in test_case_list %}
+
+
+<b>name:</b><br>
+<font color="green">
+{{ i.case_name }}
+</font>
+<br>
+<br>
+<b>step:</b><br>
+<font color="blue">
+{{ i.case_step|linebreaksbr }}<br>
+{{ i.content }}<br>
+
+</font>
+<b>except result:</b><br>
+<font color="grey">
+{{ i.case_except|linebreaksbr }}<br>
+</font>
+
+
+
+
+<br>
+<br>
+<font style="font-weight:bold;" color="brown">
+<a>Test report</a>
+</font>
+<br><br>
+	{% for j in i.case_report.all %}
+        <font style="font-weight:bold;" color="blue">
+		<a>result:</a>
+        </font>
+		<br>
+		{% if j.test_result == "Pass" %}
+		<font style="font-weight:bold;" color="green">
+		{% elif j.test_result == "Fail" %}
+		<font style="font-weight:bold;" color="red">
+		{% elif j.test_result == "Untest" %}
+		<font style="font-weight:bold;" color="grey">
+		{% elif j.test_result == "Block" %}
+		<font style="font-weight:bold;" color="brown">
+		{% endif %}
+		{{ j.test_result }}<br>
+		</font>
+		
+		<br>
+        <font style="font-weight:bold;" color="blue">
+		<a>description:</a><br>
+		</font>
+		{{ j.result_description|linebreaksbr }}<br>
+		
+		{% if j.result_pic %}
+        <font style="font-weight:bold;" color="blue">
+		<a>picture:</a><br>
+		</font>
+		<img src="/media/{{ j.result_pic }}" border="1" width="270">
+
+		{% for k in j.case_pic.all %}
+		<img src="/media/{{ k.result_pic }}" border="1" width="270">
+		<button onclick="window.location.href=('/admin/Ts_app/reportpicture/{{ k.id }}/change?id={{k.id}}')">
+		edit pic
+		</button>
+		{% endfor %}
+
+		<br>
+		{% endif %}
+		
+		{% if j.result_video %}
+        <font style="font-weight:bold;" color="blue">
+		<a>video:</a><br>
+		</font>
+		<video width="270" controls>
+		<source src="/media/{{ j.result_video }}" type="video/mp4">
+		not suport video tag
+		</video>
+		{% endif %}
+		
+		<br>
+
+		{% if j.result_log %}
+        <font style="font-weight:bold;" color="blue">
+		<a>log:</a><br>
+		</font>
+		<a href="/media/{{ j.result_log }}">{{ j.result_log }}</a>
+		{% endif %}
+		
+		<br>
+
+		<button onclick="window.location.href=('/admin/Ts_app/testlinkreport/{{ j.id }}/change?id={{i.id}}')">
+		edit report
+		</button>
+		<button onclick="window.location.href=('/admin/Ts_app/reportpicture/add/?id={{j.id}}')">
+		add pic
+		</button>
+		<br>
+		<br>
+	{% endfor %}
+		<br>
+		<br>
+		<br>
+	
+	
+
+		<button onclick="window.location.href=('/admin/Ts_app/testlinkreport/add?id={{i.id}}')">
+		add report
+		</button>
+		<br>
+
+	
+	
+
+{% endfor %}
+
+
+
+
+{% endautoescape %}
